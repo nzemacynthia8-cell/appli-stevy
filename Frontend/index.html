@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Stevy IA</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #1f2833;
+      color: #c5c6c7;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: #45a29e;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    nav {
+      display: flex;
+      justify-content: center;
+      background: #0b0c10;
+    }
+    nav button {
+      flex: 1;
+      padding: 15px;
+      border: none;
+      background: #0b0c10;
+      color: #66fcf1;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    nav button:hover {
+      background: #45a29e;
+      color: white;
+    }
+    section {
+      display: none;
+      padding: 20px;
+      text-align: center;
+    }
+    section.active {
+      display: block;
+    }
+    input, textarea {
+      padding: 10px;
+      margin: 10px;
+      width: 60%;
+    }
+    button.action {
+      padding: 10px 20px;
+      background: #66fcf1;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      border-radius: 5px;
+    }
+    button.action:hover {
+      background: #45a29e;
+      color: white;
+    }
+    img, video, audio {
+      margin-top: 20px;
+      max-width: 80%;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🤖 Stevy IA</h1>
+    <p>Chat, Images, Vidéos et Audio IA</p>
+  </header>
+
+  <nav>
+    <button onclick="showTab('chat')">💬 Chat IA</button>
+    <button onclick="showTab('image')">🖼️ Images IA</button>
+    <button onclick="showTab('video')">🎬 Vidéos IA</button>
+    <button onclick="showTab('audio')">🎤 Audio IA</button>
+  </nav>
+
+  <!-- Chat IA -->
+  <section id="chat" class="active">
+    <h2>Chat IA (connecté à ChatGPT)</h2>
+    <textarea id="chatInput" placeholder="Pose ta question..."></textarea><br>
+    <button class="action" onclick="askChat()">Envoyer</button>
+    <div id="chatResult"></div>
+  </section>
+
+  <!-- Images IA -->
+  <section id="image">
+    <h2>Créer une image IA</h2>
+    <input id="imagePrompt" type="text" placeholder="Décris ton image..."><br>
+    <button class="action" onclick="createImage()">Créer une image</button>
+    <div id="imageResult"></div>
+  </section>
+
+  <!-- Vidéos IA -->
+  <section id="video">
+    <h2>Créer une vidéo IA</h2>
+    <input id="videoScript" type="text" placeholder="Décris ta vidéo..."><br>
+    <button class="action" onclick="createVideo()">Créer une vidéo</button>
+    <div id="videoResult"></div>
+  </section>
+
+  <!-- Audio IA -->
+  <section id="audio">
+    <h2>Créer un audio IA</h2>
+    <input id="audioText" type="text" placeholder="Écris ton texte..."><br>
+    <button class="action" onclick="createAudio()">Créer un audio</button>
+    <div id="audioResult"></div>
+  </section>
+
+  <script>
+    // ✅ Gestion des onglets
+    function showTab(tabId) {
+      document.querySelectorAll("section").forEach(sec => sec.classList.remove("active"));
+      document.getElementById(tabId).classList.add("active");
+    }
+
+    // ✅ Chat IA connecté à ChatGPT
+    async function askChat() {
+      const question = document.getElementById("chatInput").value;
+      const response = await fetch("http://localhost:3000/ask", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question })
+      });
+      const data = await response.json();
+      document.getElementById("chatResult").innerText = data.answer;
+    }
+
+    // ✅ Placeholder pour Images IA
+    async function createImage() {
+      const prompt = document.getElementById("imagePrompt").value;
+      const response = await fetch("http://localhost:3000/create-image", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt })
+      });
+      const data = await response.json();
+      document.getElementById("imageResult").innerHTML = `<img src="${data.image}" alt="Image générée">`;
+    }
+
+    // ✅ Placeholder pour Vidéos IA
+    async function createVideo() {
+      const script = document.getElementById("videoScript").value;
+      const response = await fetch("http://localhost:3000/create-video", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ script })
+      });
+      const data = await response.json();
+      document.getElementById("videoResult").innerHTML = `<video controls src="${data.videoUrl}"></video>`;
+    }
+
+    // ✅ Placeholder pour Audio IA
+    async function createAudio() {
+      const text = document.getElementById("audioText").value;
+      const response = await fetch("http://localhost:3000/create-audio", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text })
+      });
+      const data = await response.json();
+      document.getElementById("audioResult").innerHTML = `<audio controls src="${data.audioUrl}"></audio>`;
+    }
+  </script>
+</body>
+</html>
