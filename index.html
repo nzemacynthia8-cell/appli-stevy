@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>STV - Streaming</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body { font-family: Arial, sans-serif; background: #111; color: #eee; margin: 0; }
+    header.hero { text-align: center; padding: 20px; background: #222; }
+    .hero-img { max-width: 200px; border-radius: 10px; }
+    input, button { padding: 10px; margin: 5px; border-radius: 5px; }
+
+    /* Grille pour les vidéos */
+    #result {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px;
+      padding: 20px;
+    }
+    .video-card {
+      background: #1c1c1c;
+      padding: 15px;
+      border-radius: 10px;
+      text-align: center;
+    }
+    .video-card img {
+      width: 100%;
+      border-radius: 10px;
+      margin-bottom: 10px;
+    }
+    .video-card h3 {
+      font-size: 16px;
+      margin: 10px 0;
+    }
+    .video-card iframe {
+      width: 100%;
+      height: 180px;
+      border-radius: 10px;
+    }
+    .youtube-link {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 8px 12px;
+      background: #ff0000;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: bold;
+    }
+    .youtube-link:hover {
+      background: #cc0000;
+    }
+    .stv-link {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 8px 12px;
+      background: #000;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: bold;
+    }
+    .stv-link:hover {
+      background: #333;
+    }
+  </style>
+</head>
+<body onload="searchYouTube()"> <!-- Lance la recherche automatiquement -->
+  <header class="hero">
+    <img src="images/naruto.jpg" alt="Naruto STV" class="hero-img">
+    <div class="hero-text">
+      <h1>Bienvenue sur STV 🎬</h1>
+      <p>Films, Extraits & Horreur</p>
+      
+      <!-- Barre de recherche connectée à YouTube -->
+      <input type="text" id="searchInput" placeholder="Rechercher une vidéo..." value="Naruto">
+      <button onclick="searchYouTube()">Rechercher</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="video-container">
+      <!-- Vidéo publicitaire qui démarre automatiquement -->
+      <video autoplay muted loop controls width="560" height="315">
+        <source src="videos/film.mp4" type="video/mp4">
+        Votre navigateur ne supporte pas la vidéo HTML5.
+      </video>
+    </section>
+
+    <!-- Résultats de recherche YouTube -->
+    <div id="result"></div>
+  </main>
+<footer>
+  <p>
+    Application web de lecture de vidéos YouTube développée par <strong>BEZEZE Aimé Stevy</strong><br>
+    © 2026 <strong>OLOUOMO LAB</strong> — Tous droits réservés.
+  </p>
+</footer>
+
+  <script>
+    async function searchYouTube() {
+      const query = document.getElementById("searchInput").value;
+      const apiKey = "AIzaSyBnzXAf6DH95X4rz5TuQKVDXx5oFK0enws"; // ta clé API YouTube
+      const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&q=${encodeURIComponent(query)}&maxResults=15&key=${apiKey}`;
+
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.items && data.items.length > 0) {
+          let resultsHTML = "";
+          data.items.forEach(item => {
+            const videoId = item.id.videoId;
+            const title = item.snippet.title;
+            const thumbnail = item.snippet.thumbnails.medium.url;
+            const videoUrl = `https://www.youtube.com/watch?v=${videoId}`;
+
+            resultsHTML += `
+              <div class="video-card">
+                <h3>${title}</h3>
+                <img src="${thumbnail}" alt="${title}">
+                <iframe id="player-${videoId}"
+                  src="https://www.youtube.com/embed/${videoId}"
+                  frameborder="0" allowfullscreen
+                  referrerpolicy="strict-origin-when-cross-origin">
+                </iframe>
+                <a href="${videoUrl}" target="_blank" class="youtube-link">▶ Voir sur YouTube</a>
+                <button onclick="playOnSTV('${videoId}')" class="stv-link">🎬 Lire sur STV</button>
+              </div>
+            `;
+          });
+          document.getElementById("result").innerHTML = resultsHTML;
+        } else {
+          document.getElementById("result").innerHTML = "⚠️ Aucun résultat trouvé.";
+        }
+      } catch (error) {
+        console.error(error);
+        document.getElementById("result").innerHTML = "Erreur de connexion à Internet.";
+      }
+    }
+
+    // Fonction pour lire en plein écran dans STV
+    function playOnSTV(videoId) {
+      const iframe = document.getElementById(`player-${videoId}`);
+      if (iframe.requestFullscreen) {
+        iframe.requestFullscreen();
+      } else if (iframe.webkitRequestFullscreen) { // Safari
+        iframe.webkitRequestFullscreen();
+      } else if (iframe.msRequestFullscreen) { // IE/Edge
+        iframe.msRequestFullscreen();
+      }
+    }
+
+    // Lance une recherche automatique dès l’ouverture de la page
+    window.onload = () => {
+      document.getElementById("searchInput").value = "Naruto"; // recherche par défaut
+      searchYouTube();
+    };
+  </script>
+</body>
+</html>
