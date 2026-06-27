@@ -57,7 +57,7 @@ function playOnSTV(videoId) {
 
 // Lance une recherche automatique dès l’ouverture de la page
 window.onload = () => {
-  document.getElementById("searchInput").value = de film"; // recherche par défaut
+  document.getElementById("searchInput").value = naruto"; // recherche par défaut
   searchYouTube();
 };
 </script>
