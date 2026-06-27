@@ -13,20 +13,22 @@
     .hero-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #fff; }
     .hero-text h1 { font-size: 3em; color: #ff6600; text-shadow: 2px 2px 8px #000; }
     .hero-text p { font-size: 1.2em; margin-bottom: 15px; }
-    input, button { padding: 10px; margin: 5px; border-radius: 5px; }
+    input, button { padding: 10px; margin: 5px; border-radius: 5px; border: none; }
+    button { cursor: pointer; transition: background 0.3s ease; }
 
-    /* Grille pour les vidéos */
     #result {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
       gap: 20px;
       padding: 20px;
     }
+
     .video-card {
       background: #1c1c1c;
       padding: 15px;
       border-radius: 10px;
       text-align: center;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
     }
     .video-card img {
       width: 100%;
@@ -42,28 +44,22 @@
       height: 180px;
       border-radius: 10px;
     }
-    .youtube-link {
+
+    .youtube-link, .stv-link {
       display: inline-block;
       margin-top: 10px;
       padding: 8px 12px;
-      background: #ff0000;
       color: #fff;
       text-decoration: none;
       border-radius: 5px;
       font-weight: bold;
+      transition: background 0.3s ease;
     }
+    .youtube-link { background: #ff0000; }
     .youtube-link:hover { background: #cc0000; }
-    .stv-link {
-      display: inline-block;
-      margin-top: 10px;
-      padding: 8px 12px;
-      background: #000;
-      color: #fff;
-      text-decoration: none;
-      border-radius: 5px;
-      font-weight: bold;
-    }
+    .stv-link { background: #000; }
     .stv-link:hover { background: #333; }
+
     footer {
       background: #111;
       padding: 15px;
@@ -71,16 +67,31 @@
       font-size: 0.9em;
       color: #aaa;
     }
+
+    /* Loader animé */
+    .loader {
+      border: 6px solid #333;
+      border-top: 6px solid #ff6600;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 20px auto;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
   </style>
 </head>
 <body>
   <header class="hero">
-    <img src="images/naruto.jpg" alt="Naruto STV" class="hero-img">
+    <img src="images/naruto.jpg" alt="Bannière Naruto STV" class="hero-img">
     <div class="hero-text">
       <h1>STV – Streaming Vidéos YouTube</h1>
       <p>Films, Extraits & Horreur</p>
-      <input type="text" id="searchInput" placeholder="Rechercher une vidéo..." value="Naruto">
-      <button onclick="searchYouTube()">Rechercher</button>
+      <input type="text" id="searchInput" placeholder="Rechercher une vidéo..." value="Naruto" aria-label="Champ de recherche vidéo">
+      <button type="button" onclick="searchYouTube()" aria-label="Bouton rechercher vidéo">🔎 Rechercher</button>
     </div>
   </header>
 
@@ -92,7 +103,6 @@
       </video>
     </section>
 
-    <!-- Résultats YouTube -->
     <div id="result"></div>
   </main>
 
@@ -100,7 +110,6 @@
     <p>© 2026 STV - Streaming Vidéos YouTube</p>
   </footer>
 
-  <!-- Inclusion du script -->
   <script src="script.js"></script>
 </body>
 </html>
