@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>STV - Streaming & Reconnaissance Vidéo</title>
+  <meta name="description" content="STV est une application web de streaming, lecture et reconnaissance de vidéos/musiques YouTube développée par BEZEZE Aimé Stevy.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="logo">STV<span>.</span></div>
+    <p class="tagline">Streaming & reconnaissance vidéo</p>
+  </header>
+
+  <section class="hero">
+    <div class="hero-bg">
+      <img src="images/naruto.jpg" alt="Illustration" class="hero-img">
+    </div>
+
+    <div class="hero-content">
+      <h1>Trouve. Écoute. Regarde.</h1>
+      <p class="hero-sub">Recherche des vidéos YouTube ou identifie une musique qui joue autour de toi, comme avec Shazam.</p>
+
+      <div class="mode-switch" role="tablist">
+        <button type="button" class="mode-btn active" data-mode="video" role="tab" aria-selected="true">🔎 Recherche vidéo</button>
+        <button type="button" class="mode-btn" data-mode="audio" role="tab" aria-selected="false">🎤 Reconnaissance audio</button>
+      </div>
+
+      <!-- Panneau vidéo -->
+      <div class="search-panel" id="videoPanel">
+        <div class="search-bar">
+          <input type="text" id="searchInput" placeholder="Rechercher une vidéo..." aria-label="Champ de recherche vidéo">
+          <button type="button" onclick="searchYouTube()" aria-label="Lancer la recherche vidéo">Rechercher</button>
+        </div>
+      </div>
+
+      <!-- Panneau audio -->
+      <div class="search-panel hidden" id="audioPanel">
+        <button type="button" id="listenBtn" class="listen-btn" onclick="toggleListening()">
+          <span class="listen-icon">🎤</span>
+          <span id="listenLabel">Identifier ce son</span>
+        </button>
+
+        <div id="listeningViz" class="listening-viz hidden">
+          <div class="orb" aria-hidden="true">
+            <span class="bar"></span><span class="bar"></span><span class="bar"></span><span class="bar"></span><span class="bar"></span>
+          </div>
+          <p class="listening-text" id="listeningText">Écoute en cours…</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main>
+    <div id="recognizedTrack" class="hidden"></div>
+
+    <div class="results-toolbar hidden" id="resultsToolbar">
+      <h2 id="resultsTitle">Résultats</h2>
+      <button type="button" onclick="telechargerVideos()">📥 Télécharger les résultats</button>
+    </div>
+
+    <div id="result"></div>
+  </main>
+
+  <section class="video-container">
+    <video autoplay muted loop controls width="560" height="315">
+      <source src="videos/film.mp4" type="video/mp4">
+      Votre navigateur ne supporte pas la vidéo HTML5.
+    </video>
+  </section>
+
+  <footer>
+    <p>© 2026 STV - Streaming Vidéos YouTube · par BEZEZE Aimé Stevy</p>
+  </footer>
+
+  <!-- API YouTube -->
+  <script src="https://www.youtube.com/iframe_api"></script>
+  <!-- Script principal -->
+  <script src="script.js"></script>
+</body>
+</html>

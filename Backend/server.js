@@ -98,4 +98,18 @@ app.post("/create-image", async (req, res) => {
 // ✅ Lancement du serveur
 app.listen(3000, () => {
   console.log("Serveur Stevy IA connecté sur http://localhost:3000");
+});const express = require("express");
+
+const app = express();
+
+app.use(express.static(__dirname));
+
+app.get("/", (req, res) => {
+    res.sendFile(__dirname + "/index.html");
+});
+
+const PORT = 3000;
+
+app.listen(PORT, () => {
+    console.log(`Serveur lancé : http://localhost:${PORT}`);
 });
